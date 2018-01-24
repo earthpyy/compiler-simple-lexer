@@ -5,11 +5,18 @@ E			[Ee][+-]?{D}+
 FS			(f|F|l|L)
 IS			(u|U|l|L)*
 
+%option noyywrap
 %{
 #include <stdio.h>
-#include "y.tab.h"
-
-void count();
+enum {IDENTIFIER=300, CONSTANT, STRING_LITERAL, SIZEOF};
+enum {PTR_OP=400, INC_OP, DEC_OP, LEFT_OP, RIGHT_OP, LE_OP, GE_OP, EQ_OP, NE_OP};
+enum {AND_OP=500, OR_OP, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, ADD_ASSIGN};
+enum {SUB_ASSIGN=600, LEFT_ASSIGN, RIGHT_ASSIGN, AND_ASSIGN, XOR_ASSIGN, OR_ASSIGN,TYPE_NAME};
+enum {TYPEDEF=700, EXTERN, STATIC, AUTO, REGISTER};
+enum {CHAR=800, SHORT, INT, LONG, SIGNED, UNSIGNED, FLOAT, DOUBLE, CONST, VOLATILE, VOID,STRUCT, UNION, ENUM, ELLIPSIS};
+enum {CASE=900, DEFAULT, IF, ELSE, SWITCH, WHILE, DO, FOR, GOTO, CONTINUE, BREAK, RETURN};
+void comment(void);
+void count(void);
 %}
 
 %%
@@ -113,13 +120,7 @@ L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
 
 %%
 
-yywrap()
-{
-	return(1);
-}
-
-
-comment()
+void comment()
 {
 	char c, c1;
 
@@ -172,4 +173,13 @@ int check_type()
 */
 
 	return(IDENTIFIER);
+}
+
+void main(int argc, char **argv)
+{
+    int tok;
+
+    while(tok = yylex()) {
+        printf("%d", tok);
+    }
 }
