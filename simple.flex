@@ -23,7 +23,7 @@ void comment(void);
 %%
 "/*"					{ comment(); }
 
-#(.)*					{ /* ignore C preprocessor */ }
+#[^\n]*					{ /* ignore C preprocessor */ }
 "//"[^\n]*              { /* ignore single-line comment */ }
 
 "auto"					{ return(AUTO); }
