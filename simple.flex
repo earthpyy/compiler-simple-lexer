@@ -1,9 +1,9 @@
-D			[0-9]
-L			[a-zA-Z_]
-H			[a-fA-F0-9]
-E			[Ee][+-]?{D}+
-FS			(f|F|l|L)
-IS			(u|U|l|L)*
+D            [0-9]
+L            [a-zA-Z_]
+H            [a-fA-F0-9]
+E            [Ee][+-]?{D}+
+FS           (f|F|l|L)
+IS           (u|U|l|L)*
 
 %option noyywrap
 %{
@@ -21,157 +21,160 @@ void comment(void);
 %}
 
 %%
-"/*"					{ comment(); }
+"/*"                    { comment();                        }
 
-#[^\n]*					{ /* ignore C preprocessor */ }
-"//"[^\n]*              { /* ignore single-line comment */ }
+#[^\n]*                 { /* ignore C preprocessor */       }
+"//"[^\n]*              { /* ignore single-line comment */  }
 
-"auto"					{ return(AUTO); }
-"break"					{ return(BREAK); }
-"case"					{ return(CASE); }
-"char"					{ return(CHAR); }
-"const"					{ return(CONST); }
-"continue"				{ return(CONTINUE); }
-"default"				{ return(DEFAULT); }
-"do"					{ return(DO); }
-"double"				{ return(DOUBLE); }
-"else"					{ return(ELSE); }
-"enum"					{ return(ENUM); }
-"extern"				{ return(EXTERN); }
-"float"					{ return(FLOAT); }
-"for"					{ return(FOR); }
-"goto"					{ return(GOTO); }
-"if"					{ return(IF); }
-"int"					{ return(INT); }
-"long"					{ return(LONG); }
-"register"				{ return(REGISTER); }
-"return"				{ return(RETURN); }
-"short"					{ return(SHORT); }
-"signed"				{ return(SIGNED); }
-"sizeof"				{ return(SIZEOF); }
-"static"				{ return(STATIC); }
-"struct"				{ return(STRUCT); }
-"switch"				{ return(SWITCH); }
-"typedef"				{ return(TYPEDEF); }
-"union"					{ return(UNION); }
-"unsigned"				{ return(UNSIGNED); }
-"void"					{ return(VOID); }
-"volatile"				{ return(VOLATILE); }
-"while"					{ return(WHILE); }
+"auto"                  { return(AUTO);                     }
+"break"                 { return(BREAK);                    }
+"case"                  { return(CASE);                     }
+"char"                  { return(CHAR);                     }
+"const"                 { return(CONST);                    }
+"continue"              { return(CONTINUE);                 }
+"default"               { return(DEFAULT);                  }
+"do"                    { return(DO);                       }
+"double"                { return(DOUBLE);                   }
+"else"                  { return(ELSE);                     }
+"enum"                  { return(ENUM);                     }
+"extern"                { return(EXTERN);                   }
+"float"                 { return(FLOAT);                    }
+"for"                   { return(FOR);                      }
+"goto"                  { return(GOTO);                     }
+"if"                    { return(IF);                       }
+"int"                   { return(INT);                      }
+"long"                  { return(LONG);                     }
+"register"              { return(REGISTER);                 }
+"return"                { return(RETURN);                   }
+"short"                 { return(SHORT);                    }
+"signed"                { return(SIGNED);                   }
+"sizeof"                { return(SIZEOF);                   }
+"static"                { return(STATIC);                   }
+"struct"                { return(STRUCT);                   }
+"switch"                { return(SWITCH);                   }
+"typedef"               { return(TYPEDEF);                  }
+"union"                 { return(UNION);                    }
+"unsigned"              { return(UNSIGNED);                 }
+"void"                  { return(VOID);                     }
+"volatile"              { return(VOLATILE);                 }
+"while"                 { return(WHILE);                    }
 
-{L}({L}|{D})*			{ return(check_type()); }
+{L}({L}|{D})*           { return(check_type());             }
 
-0[xX]{H}+{IS}?			{ return(CONSTANT); }
-0{D}+{IS}?				{ return(CONSTANT); }
-{D}+{IS}?				{ return(CONSTANT); }
-L?'(\\.|[^\\'])+'		{ return(CONSTANT); }
+0[xX]{H}+{IS}?          { return(CONSTANT);                 }
+0{D}+{IS}?              { return(CONSTANT);                 }
+{D}+{IS}?               { return(CONSTANT);                 }
+L?'(\\.|[^\\'])+'       { return(CONSTANT);                 }
 
-{D}+{E}{FS}?			{ return(CONSTANT); }
-{D}*"."{D}+({E})?{FS}?	{ return(CONSTANT); }
-{D}+"."{D}*({E})?{FS}?	{ return(CONSTANT); }
+{D}+{E}{FS}?            { return(CONSTANT);                 }
+{D}*"."{D}+({E})?{FS}?  { return(CONSTANT);                 }
+{D}+"."{D}*({E})?{FS}?  { return(CONSTANT);                 }
 
-L?\"(\\.|[^\\"])*\"		{ return(STRING_LITERAL); }
+L?\"(\\.|[^\\"])*\"     { return(STRING_LITERAL);           }
 
-"..."					{ return(ELLIPSIS); }
-">>="					{ return(RIGHT_ASSIGN); }
-"<<="					{ return(LEFT_ASSIGN); }
-"+="					{ return(ADD_ASSIGN); }
-"-="					{ return(SUB_ASSIGN); }
-"*="					{ return(MUL_ASSIGN); }
-"/="					{ return(DIV_ASSIGN); }
-"%="					{ return(MOD_ASSIGN); }
-"&="					{ return(AND_ASSIGN); }
-"^="					{ return(XOR_ASSIGN); }
-"|="					{ return(OR_ASSIGN); }
-">>"					{ return(RIGHT_OP); }
-"<<"					{ return(LEFT_OP); }
-"++"					{ return(INC_OP); }
-"--"					{ return(DEC_OP); }
-"->"					{ return(PTR_OP); }
-"&&"					{ return(AND_OP); }
-"||"					{ return(OR_OP); }
-"<="					{ return(LE_OP); }
-">="					{ return(GE_OP); }
-"=="					{ return(EQ_OP); }
-"!="					{ return(NE_OP); }
-";"					 	{ return(';'); }
-("{"|"<%")				{ return('{'); }
-("}"|"%>")				{ return('}'); }
-","						{ return(','); }
-":"						{ return(':'); }
-"="						{ return('='); }
-"("						{ return('('); }
-")"						{ return(')'); }
-("["|"<:")				{ return('['); }
-("]"|":>")				{ return(']'); }
-"."						{ return('.'); }
-"&"						{ return('&'); }
-"!"						{ return('!'); }
-"~"						{ return('~'); }
-"-"						{ return('-'); }
-"+"						{ return('+'); }
-"*"						{ return('*'); }
-"/"						{ return('/'); }
-"%"						{ return('%'); }
-"<"						{ return('<'); }
-">"						{ return('>'); }
-"^"						{ return('^'); }
-"|"						{ return('|'); }
-"?"						{ return('?'); }
-[ \t\v\n\f]				{ /* ignore whitespace */ }
+"..."                   { return(ELLIPSIS);                 }
+">>="                   { return(RIGHT_ASSIGN);             }
+"<<="                   { return(LEFT_ASSIGN);              }
+"+="                    { return(ADD_ASSIGN);               }
+"-="                    { return(SUB_ASSIGN);               }
+"*="                    { return(MUL_ASSIGN);               }
+"/="                    { return(DIV_ASSIGN);               }
+"%="                    { return(MOD_ASSIGN);               }
+"&="                    { return(AND_ASSIGN);               }
+"^="                    { return(XOR_ASSIGN);               }
+"|="                    { return(OR_ASSIGN);                }
+">>"                    { return(RIGHT_OP);                 }
+"<<"                    { return(LEFT_OP);                  }
+"++"                    { return(INC_OP);                   }
+"--"                    { return(DEC_OP);                   }
+"->"                    { return(PTR_OP);                   }
+"&&"                    { return(AND_OP);                   }
+"||"                    { return(OR_OP);                    }
+"<="                    { return(LE_OP);                    }
+">="                    { return(GE_OP);                    }
+"=="                    { return(EQ_OP);                    }
+"!="                    { return(NE_OP);                    }
+";"                     { return(';');                      }
+("{"|"<%")              { return('{');                      }
+("}"|"%>")              { return('}');                      }
+","                     { return(',');                      }
+":"                     { return(':');                      }
+"="                     { return('=');                      }
+"("                     { return('(');                      }
+")"                     { return(')');                      }
+("["|"<:")              { return('[');                      }
+("]"|":>")              { return(']');                      }
+"."                     { return('.');                      }
+"&"                     { return('&');                      }
+"!"                     { return('!');                      }
+"~"                     { return('~');                      }
+"-"                     { return('-');                      }
+"+"                     { return('+');                      }
+"*"                     { return('*');                      }
+"/"                     { return('/');                      }
+"%"                     { return('%');                      }
+"<"                     { return('<');                      }
+">"                     { return('>');                      }
+"^"                     { return('^');                      }
+"|"                     { return('|');                      }
+"?"                     { return('?');                      }
+[ \t\v\n\f]             { /* ignore whitespace */           }
 
-.						{ /* ignore bad characters */ }
+.                       { /* ignore bad characters */       }
 
 %%
 
 void comment(void)
 {
-	char c, prev = 0;
+    // } for dummy purpose
+    char c, prev = 0;
   
-	while ((c = input()) != 0)      /* (EOF maps to 0) */
-	{
-		if (c == '/' && prev == '*')
-			return;
-		prev = c;
-	}
+    while ((c = input()) != 0)      /* (EOF maps to 0) */
+    {
+        if (c == '/' && prev == '*')
+            return;
+        prev = c;
+    }
 }
 
 
 int check_type()
 {
+    // } for dummy purpose
 /*
 * pseudo code --- this is what it should check
 *
-*	if (yytext == type_name)
-*		return(TYPE_NAME);
+*    if (yytext == type_name)
+*        return(TYPE_NAME);
 *
-*	return(IDENTIFIER);
+*    return(IDENTIFIER);
 */
 
 /*
-*	it actually will only return IDENTIFIER
+*    it actually will only return IDENTIFIER
 */
 
-	return(IDENTIFIER);
+    return(IDENTIFIER);
 }
 
 int main(int argc, char **argv)
 {
-	yyin = fopen(argv[1], "r");
-	
-	int token;
+    // } for dummy purpose
+    yyin = fopen(argv[1], "r");
+    
+    int token;
 
     while((token = yylex())) {
         printf("[%d", token);
 
-		if (token == 300 || token == 301) {
-			printf(", %s", yytext);
-		}
+        if (token == 300 || token == 301) {
+            printf(", %s", yytext);
+        }
 
-		printf("]\n");
+        printf("]\n");
     }
 
-	fclose(yyin);
+    fclose(yyin);
 
-	return 0;
+    return 0;
 }
